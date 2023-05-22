@@ -1,0 +1,17 @@
+steps:
+  # install dependencies
+  - name: python
+    entrypoint: pip
+    args: ["install", "-r", "utils/requirements.txt", "--user"]
+
+  # run
+  - name: python
+    entrypoint: python
+    args:
+      [
+        "utils/add_dags_to_composer.py",
+        "--dags_directory=dags/",
+        "--dags_bucket=asia-southeast1-experimenta-7fbc06ba-bucket",
+      ]
+options:
+  logging: CLOUD_LOGGING_ONLY
