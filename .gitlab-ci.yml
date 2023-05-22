@@ -1,0 +1,18 @@
+# File: .gitlab-ci.yml
+image: docker:20.10.16
+
+stages:
+  - build-push-deploy
+
+build-push-deploy:
+  stage: build-push-deploy
+  image: google/cloud-sdk
+  rules:
+    - if: ($CI_COMMIT_BRANCH == "master")
+  services:
+    - docker:20.10.16-dind
+  script:
+    - echo $SERVICE_ACCOUNT_KEY > service-key.json # Google Cloud service accounts
+    - gcloud auth activate-service-account --key-file service-key.json
+    - gcloud config set project $PROJECT_ID
+    - gcloud builds submit . --config=cloudbuild.yaml
